@@ -30,9 +30,14 @@ body {
 
 /* Header */
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: var(--header-bg);
     border-bottom: 1px solid #ddd;
     padding: 1rem 0;
+    z-index: 1000;
 }
 
 .logo {
@@ -58,6 +63,7 @@ body {
 
 /* Main */
 .main {
+    margin-top: 113px;
     padding: 2rem 1rem;
 }
 
