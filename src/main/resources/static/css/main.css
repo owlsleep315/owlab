@@ -40,6 +40,19 @@ body {
     z-index: 1000;
 }
 
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.logo-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem; /* 로고와 메뉴 사이 간격 */
+}
+
 .logo {
     font-size: 1.8rem;
     color: var(--primary-color);
@@ -47,17 +60,34 @@ body {
 }
 
 .nav {
-    margin-top: 0.5rem;
+    display: flex;
+    gap: 1rem;
 }
 
 .nav a {
-    margin-right: 1rem;
     text-decoration: none;
     color: var(--text-color);
     font-weight: 500;
 }
 
 .nav a:hover {
+    color: var(--secondary-color);
+}
+
+.auth-nav {
+    font-size: 0.95rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.auth-nav a {
+    font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.auth-nav a:hover {
     color: var(--secondary-color);
 }
 
