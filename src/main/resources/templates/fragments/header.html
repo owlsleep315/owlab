@@ -10,15 +10,16 @@
 <body>
   <header class="header">
     <div class="container header-inner">
-      <div class="logo-nav">
-        <h1 class="logo">🦉 Owlab</h1>
-        <nav class="nav">
-          <a href="/">홈</a>
-          <a href="/board">게시판</a>
-          <a href="/wordle">워들</a>
-          <a href="/food">뭐먹지</a>
-        </nav>
-      </div>
+        <div class="logo-nav">
+          <h1 class="logo">
+            <a href="/">🦉 Owlab</a>
+          </h1>
+          <nav class="nav">
+            <a href="/board">게시판</a>
+            <a href="/wordle">워들</a>
+            <a href="/food">뭐먹지</a>
+          </nav>
+        </div>
 
       <div class="auth-nav" th:if="${session.loginUser != null}">
         <span th:text="'환영합니다, ' + ${session.loginUser.name} + '님!'"></span>
