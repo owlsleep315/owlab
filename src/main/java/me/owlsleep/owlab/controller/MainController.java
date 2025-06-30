@@ -10,4 +10,19 @@ public class MainController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/board")
+    public String board() {
+        return "board";
+    }
+
+    @GetMapping("/wordle")
+    public String wordle() {
+        return "wordle";
+    }
+
+    @GetMapping("/food")
+    public String food() {
+        return "food";
+    }
 }
