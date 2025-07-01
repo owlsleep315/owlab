@@ -1,14 +1,13 @@
 package me.owlsleep.owlab.controller;
 
 import jakarta.servlet.http.HttpSession;
+import me.owlsleep.owlab.dto.request.LoginRequestDto;
+import me.owlsleep.owlab.dto.request.RegisterRequestDto;
 import me.owlsleep.owlab.entity.User;
 import me.owlsleep.owlab.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -25,12 +24,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
+    public String login(@ModelAttribute LoginRequestDto loginRequestDto,
                         HttpSession session,
                         Model model) {
         try {
-            User user = userService.login(username, password);
+            User user = userService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
             session.setAttribute("loginUser", user);
             return "redirect:/";
         } catch (IllegalArgumentException e) {
@@ -45,12 +43,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String name,
-                           @RequestParam String username,
-                           @RequestParam String password,
+    public String register(@ModelAttribute RegisterRequestDto registerRequestDto,
                            Model model) {
         try {
-            userService.register(name, username, password);
+            userService.register(registerRequestDto.getName(), registerRequestDto.getUsername(), registerRequestDto.getPassword());
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
