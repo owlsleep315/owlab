@@ -20,8 +20,20 @@ public class UserService {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
+
         String encodedPassword = passwordEncoder.encode(rawPassword);
-        userRepository.save(new User(null, name, username, encodedPassword));
+
+        User user = new User();
+        user.setName(name);
+        user.setUsername(username);
+        user.setPassword(encodedPassword);
+
+        if (username.equals("admin")) {
+            user.setRole("ADMIN");
+        } else {
+            user.setRole("USER");
+        }
+        userRepository.save(user);
     }
 
     public User login(String username, String rawPassword) {

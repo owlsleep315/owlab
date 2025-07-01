@@ -1,0 +1,100 @@
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+.category-tabs a {
+    margin-right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    background: #ddd;
+}
+
+.category-tabs a.active {
+    background: #483AA0;
+    color: white;
+}
+
+.post-list .post-row {
+    border-bottom: 1px solid #ccc;
+    padding: 1rem 0;
+}
+
+.post-view h2 {
+    margin-top: 0;
+}
+
+.comment {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid #ccc;
+    margin-bottom: 1rem;
+}
+
+.comment-form textarea,
+.reply-form textarea {
+    width: 100%;
+    height: 4rem;
+}
+
+.reply-toggle {
+    background: none;
+    color: #0077cc;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+/* 글쓰기/수정 폼 스타일 */
+
+.write-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 700px;
+    margin: 2rem auto;
+}
+
+.write-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.write-form select,
+.write-form input[type="text"],
+.write-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: 'Noto Sans', sans-serif;
+    resize: vertical;
+}
+
+.write-form textarea {
+    min-height: 150px;
+}
+
+.write-form button[type="submit"] {
+    width: 100px;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    background-color: #483AA0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+}
+
+.write-form button[type="submit"]:hover {
+    background-color: #352d7a;
+}

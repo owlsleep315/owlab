@@ -22,4 +22,9 @@ public class User {
 
     private String password;
 
+    private String role = "USER"; // 기본값 USER
+
+    public boolean isAdmin() {
+        return "ADMIN".equalsIgnoreCase(role);
+    }
 }

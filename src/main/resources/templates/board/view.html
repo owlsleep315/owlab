@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Owlab</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}" />
+    <script th:src="@{/js/board.js}" defer></script>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<main class="main">
+    <div class="container">
+        <div class="post-view">
+            <h2 th:text="${post.title}">제목</h2>
+            <div class="post-meta">
+                <span th:text="${post.author}">작성자</span> |
+                <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span> |
+                조회수 <span th:text="${post.views}"></span>
+            </div>
+            <div class="post-content" th:text="${post.content}">내용</div>
+
+            <div class="post-actions">
+                <form th:action="@{'/board/like/' + ${post.id}}" method="post">
+                    <button type="submit">👍 추천 (<span th:text="${post.likes}">0</span>)</button>
+                </form>
+                <form th:action="@{'/board/dislike/' + ${post.id}}" method="post">
+                    <button type="submit">👎 비추천 (<span th:text="${post.dislikes}">0</span>)</button>
+                </form>
+                <a th:if="${loginUser != null and (loginUser.name == post.author or loginUser.admin)}"
+                   th:href="@{'/board/edit/' + ${post.id}}">수정</a>
+
+                <form th:if="${loginUser != null and (loginUser.name == post.author or loginUser.admin)}"
+                      th:action="@{'/board/delete/' + ${post.id}}" method="post">
+                    <button type="submit">삭제</button>
+                </form>
+
+            </div>
+
+            <hr>
+
+            <div class="comments">
+                <h3>댓글</h3>
+                <div th:each="comment : ${comments}">
+                    <div th:replace="~{::commentFragment(comment=${comment}, loginUser=${loginUser})}"></div>
+                </div>
+
+                <form th:action="@{/board/comment}" method="post" class="comment-form">
+                    <input type="hidden" name="postId" th:value="${post.id}" />
+                    <textarea name="content" placeholder="댓글을 입력하세요"></textarea>
+                    <button type="submit">댓글 작성</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 댓글 트리 재귀 렌더링 fragment -->
+        <th:block th:fragment="commentFragment (comment, loginUser)">
+            <th:block th:if="${comment != null}">
+                <div class="comment">
+                    <p><b th:text="${comment.author}">작성자</b> <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                    <p th:text="${comment.content}">내용</p>
+
+                    <form th:action="@{/board/comment}" method="post" class="reply-form hidden">
+                        <input type="hidden" name="postId" th:value="${comment.postId}" />
+                        <input type="hidden" name="parentId" th:value="${comment.id}" />
+                        <textarea name="content" placeholder="답글을 입력하세요"></textarea>
+                        <button type="submit">답글 작성</button>
+                    </form>
+
+                    <button type="button" class="reply-toggle">↪ 답글</button>
+
+                    <form th:if="${loginUser != null and (loginUser.name == comment.author or loginUser.admin)}"
+                          th:action="@{'/board/comment/delete/' + ${comment.id}}" method="post">
+                        <input type="hidden" name="postId" th:value="${post.id}" />
+                        <button type="submit">삭제</button>
+                    </form>
+
+                    <div class="replies" th:each="reply : ${comment.replies}">
+                        <div th:replace="~{::commentFragment(comment=${reply}, loginUser=${loginUser})}"></div>
+                    </div>
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+
+</main>
+
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>
