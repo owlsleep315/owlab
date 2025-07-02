@@ -2,12 +2,14 @@ package me.owlsleep.owlab.service;
 
 import me.owlsleep.owlab.dto.CommentDto;
 import me.owlsleep.owlab.dto.PostDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface BoardService {
 
-    List<PostDto> getAllPosts(String category);
+    Page<PostDto> getAllPosts(String category, Pageable pageable);
 
     PostDto getPostById(Long id);
 

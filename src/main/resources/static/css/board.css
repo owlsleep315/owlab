@@ -15,38 +15,241 @@ a {
     color: white;
 }
 
-.post-list .post-row {
-    border-bottom: 1px solid #ccc;
-    padding: 1rem 0;
+table.post-list {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin-top: 1rem;
 }
 
-.post-view h2 {
-    margin-top: 0;
+.post-list th, .post-list td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.post-list th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+.post-list tbody tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.post-list a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+}
+.pagination li {
+    margin: 0 5px;
+}
+.pagination li a {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.pagination li.active a {
+    background-color: #032148;
+    color: white;
+    font-weight: bold;
+}
+
+/* 게시글 상세 보기 */
+.post-view {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.post-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.post-meta {
+    display: flex;
+    gap: 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.post-content {
+    min-height: 200px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.post-actions button {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.post-actions .btn-like:hover {
+    background-color: #e7f5ec;
+    border-color: #28a745;
+}
+
+.post-actions .btn-dislike:hover {
+    background-color: #fbe9eb;
+    border-color: #dc3545;
+}
+
+.post-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.post-buttons a, .post-buttons button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+/* 댓글 */
+.comments-section {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.comments-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.comment-form button {
+    align-self: flex-end;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-list {
+    margin-top: 2rem;
 }
 
 .comment {
-    margin-left: 1rem;
-    padding-left: 1rem;
-    border-left: 2px solid #ccc;
-    margin-bottom: 1rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #eee;
 }
 
-.comment-form textarea,
-.reply-form textarea {
-    width: 100%;
-    height: 4rem;
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.comment-author {
+    font-weight: 600;
+}
+
+.comment-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.comment-content {
+    margin-bottom: 0.5rem;
 }
 
 .reply-toggle {
     background: none;
-    color: #0077cc;
     border: none;
+    color: var(--secondary-color);
     cursor: pointer;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0;
 }
 
-.hidden {
-    display: none;
+.reply-form {
+    margin-top: 1rem;
+    padding-left: 1rem;
+}
+
+.replies {
+    margin-left: 2rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid #eee;
+    margin-top: 1rem;
 }
 
 /* 글쓰기/수정 폼 스타일 */

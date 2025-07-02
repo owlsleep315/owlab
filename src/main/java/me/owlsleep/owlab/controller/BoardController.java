@@ -3,8 +3,13 @@ package me.owlsleep.owlab.controller;
 import jakarta.servlet.http.HttpSession;
 import me.owlsleep.owlab.dto.CommentDto;
 import me.owlsleep.owlab.dto.PostDto;
+import me.owlsleep.owlab.entity.Post;
 import me.owlsleep.owlab.entity.User;
 import me.owlsleep.owlab.service.BoardService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +27,10 @@ public class BoardController {
     }
 
     @GetMapping
-    public String boardList(@RequestParam(required = false) String category, Model model) {
-        List<PostDto> posts = boardService.getAllPosts(category);
+    public String boardList(@RequestParam(required = false) String category,
+                            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                            Model model) {
+        Page<PostDto> posts = boardService.getAllPosts(category, pageable);
         model.addAttribute("posts", posts);
         model.addAttribute("category", category);
         return "board/list";
@@ -47,7 +54,7 @@ public class BoardController {
 
     @PostMapping("/write")
     public String writePost(@ModelAttribute PostDto postDto, HttpSession session) {
-        String author = ((User)session.getAttribute("loginUser")).getName();
+        String author = ((User)session.getAttribute("loginUser")).getUsername();
         postDto.setAuthor(author);
         boardService.writePost(postDto);
         return "redirect:/board";
@@ -66,7 +73,7 @@ public class BoardController {
 
     @PostMapping("/edit")
     public String editPost(@ModelAttribute PostDto postDto, HttpSession session) {
-        String author = ((User)session.getAttribute("loginUser")).getName();
+        String author = ((User)session.getAttribute("loginUser")).getUsername();
         boardService.updatePost(postDto, author);
         return "redirect:/board/view/" + postDto.getId();
     }
@@ -92,7 +99,7 @@ public class BoardController {
 
     @PostMapping("/comment")
     public String addComment(@ModelAttribute CommentDto commentDto, HttpSession session) {
-        String author = ((User)session.getAttribute("loginUser")).getName();
+        String author = ((User)session.getAttribute("loginUser")).getUsername();
         commentDto.setAuthor(author);
         boardService.addComment(commentDto);
         return "redirect:/board/view/" + commentDto.getPostId();

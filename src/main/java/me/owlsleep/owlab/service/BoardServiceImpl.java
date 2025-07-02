@@ -7,6 +7,8 @@ import me.owlsleep.owlab.entity.Comment;
 import me.owlsleep.owlab.entity.Post;
 import me.owlsleep.owlab.repository.CommentRepository;
 import me.owlsleep.owlab.repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,17 +27,15 @@ public class BoardServiceImpl implements BoardService {
 
     // 전체 글 조회 (카테고리별 필터링)
     @Override
-    public List<PostDto> getAllPosts(String category) {
-        List<Post> posts;
+    public Page<PostDto> getAllPosts(String category, Pageable pageable) {
+        Page<Post> posts;
         if (category != null && !category.isBlank()) {
-            posts = postRepository.findByCategoryOrderByCreatedAtDesc(category);
+            posts = postRepository.findByCategoryOrderByCreatedAtDesc(category, pageable);
         } else {
-            posts = postRepository.findAllByOrderByCreatedAtDesc();
+            posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
         }
 
-        return posts.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return posts.map(this::toDto);
     }
 
     // 게시글 상세 조회

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title th:replace="${title} ?: 'Owlab'">Owlab</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
 
 </head>
@@ -22,7 +23,7 @@
         </div>
 
       <div class="auth-nav" th:if="${session.loginUser != null}">
-        <span th:text="'환영합니다, ' + ${session.loginUser.name} + '님!'"></span>
+        <span th:text="'환영합니다, ' + ${session.loginUser.username} + '님!'"></span>
         <a href="/logout">로그아웃</a>
       </div>
       <div class="auth-nav" th:if="${session.loginUser == null}">

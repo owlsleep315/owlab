@@ -36,6 +36,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// WebJars for Bootstrap and jQuery
+	implementation 'org.webjars:bootstrap:5.3.3'
+	implementation 'org.webjars:jquery:3.7.1'
 }
 
 tasks.named('test') {

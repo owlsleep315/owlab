@@ -1,11 +1,11 @@
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".reply-toggle").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-            const form = btn.nextElementSibling;
-            if (form.classList.contains("hidden")) {
-                form.classList.remove("hidden");
-            } else {
-                form.classList.add("hidden");
+document.addEventListener('DOMContentLoaded', function () {
+    const replyToggleButtons = document.querySelectorAll('.reply-toggle');
+    replyToggleButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const formId = this.getAttribute('data-reply-form-id');
+            const form = document.getElementById(formId);
+            if (form) {
+                form.classList.toggle('d-none');
             }
         });
     });
