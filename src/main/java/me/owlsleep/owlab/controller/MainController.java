@@ -11,11 +11,6 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/wordle")
-    public String wordle() {
-        return "wordle";
-    }
-
     @GetMapping("/food")
     public String food() {
         return "food";

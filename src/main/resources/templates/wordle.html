@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Owlab</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/wordle.css}">
 </head>
 <body>
 
@@ -11,7 +12,22 @@
 
 <main class="main">
     <div class="container">
-        <h2>Wordle 페이지</h2>
+        <h2>Wordle</h2>
+        <div class="board">
+            <div class="board">
+                <div class="row" th:each="row : ${tiles}">
+                    <span class="tile" th:each="tile : ${row}"
+                        th:text="${tile.letter}"
+                        th:classappend="${tile.color}">
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <form method="post" action="/wordle/guess">
+            <input type="text" name="guess" maxlength="5" required>
+            <button type="submit">ENTER</button>
+        </form>
     </div>
 </main>
 

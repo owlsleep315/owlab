@@ -38,8 +38,8 @@ public class BoardController {
 
     @GetMapping("/view/{id}")
     public String viewPost(@PathVariable Long id, Model model, HttpSession session) {
-        PostDto post = boardService.getPostById(id);
         boardService.incrementViewCount(id);
+        PostDto post = boardService.getPostById(id);
         model.addAttribute("post", post);
         model.addAttribute("comments", boardService.getCommentsByPostId(id));
         model.addAttribute("loginUser", session.getAttribute("loginUser"));
