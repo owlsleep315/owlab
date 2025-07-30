@@ -46,11 +46,11 @@
                     <a th:href="@{/board(category=${category}, page=${posts.number - 1})}">이전</a>
                 </li>
 
-                <li th:each="i : ${#numbers.sequence(0, posts.totalPages - 1)}"
+                <li th:each="i : ${posts.totalPages > 0} ? ${#numbers.sequence(0, posts.totalPages - 1)} : ${null}"
                     th:classappend="${i} == ${posts.number} ? 'active'">
-                    <a th:href="@{/board(category=${category}, page=${i})}"
-                       th:text="${i + 1}">1</a>
+                    <a th:href="@{/board(category=${category}, page=${i})}" th:text="${i + 1}">1</a>
                 </li>
+
 
                 <li th:if="${posts.hasNext()}">
                     <a th:href="@{/board(category=${category}, page=${posts.number + 1})}">다음</a>
