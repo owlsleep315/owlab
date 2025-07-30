@@ -1,0 +1,63 @@
+.food-container {
+    max-width: var(--max-width);
+    margin: 80px auto;
+    padding: 40px 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(3, 33, 72, 0.15);
+    text-align: center;
+}
+
+.food-form {
+    margin-bottom: 20px;
+}
+
+.food-button {
+    background-color: var(--secondary-color);
+    color: white;
+    font-size: 1.3rem;
+    padding: 15px 50px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(3, 33, 72, 0.5);
+    font-weight: 600;
+}
+
+.food-button:hover {
+    background-color: var(--primary-color);
+    box-shadow: 0 6px 18px rgba(5, 5, 5, 0.7);
+}
+
+.food-button:active {
+    transform: scale(0.97);
+}
+
+.food-result {
+    margin-top: 40px;
+}
+
+.food-name {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    user-select: none;
+}
+
+@media (max-width: 600px) {
+    .food-container {
+        margin: 40px 20px;
+        padding: 30px 20px;
+    }
+
+    .food-button {
+        width: 100%;
+        padding: 15px 0;
+    }
+
+    .food-name {
+        font-size: 3rem;
+    }
+}

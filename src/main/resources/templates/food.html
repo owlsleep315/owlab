@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Owlab</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/food.css}" layout:fragment="styles">
 </head>
+
 <body>
+<section layout:fragment="content">
+    <div class="food-container">
+        <form th:action="@{/food/random}" method="post" class="food-form">
+            <button type="submit" class="food-button">메뉴 추천받기</button>
+        </form>
 
-<div th:replace="fragments/header :: header"></div>
-
-<main class="main">
-    <div class="container">
-        <h2>메뉴 추천 페이지</h2>
+        <div th:if="${randomFood != null}" class="food-result">
+            <p class="food-name" th:text="${randomFood.name}"></p>
+        </div>
     </div>
-</main>
-
-
-<div th:replace="fragments/footer :: footer"></div>
-
+</section>
 </body>
 </html>

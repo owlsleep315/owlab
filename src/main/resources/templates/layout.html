@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Owlab</title>
+
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="icon" th:href="@{/favicon.png}" type="image/png">
+
+    <!-- 페이지별 추가 스타일 -->
+    <link rel="stylesheet" layout:fragment="styles">
+</head>
+
+<body>
+
+<!-- 공통 헤더 -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- 본문 -->
+<main class="main">
+    <div class="container" layout:fragment="content">
+    </div>
+</main>
+
+<!-- 공통 푸터 -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- 페이지 전용 JS -->
+<script layout:fragment="scripts"></script>
+
+</body>
+</html>
