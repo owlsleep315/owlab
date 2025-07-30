@@ -126,3 +126,36 @@ body {
     margin-top: 2rem;
     font-size: 0.9rem;
 }
+
+@media (max-width: 768px) {
+
+    .nav {
+        gap: 0.5rem;
+    }
+
+    .auth-nav {
+        font-size: 0.85rem;
+        gap: 0.5rem;
+    }
+
+    .main {
+        padding: 1.5rem 1rem;
+    }
+
+    .main h2 {
+        font-size: 1.5rem;
+    }
+
+    .logo a {
+        font-size: 1.5rem;
+    }
+
+    .footer {
+        font-size: 0.8rem;
+        padding: 1rem 0;
+    }
+
+    .container {
+        width: 95%;
+    }
+}
