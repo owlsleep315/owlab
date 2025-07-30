@@ -64,7 +64,7 @@ public class BoardController {
     public String editForm(@PathVariable Long id, Model model, HttpSession session) {
         PostDto post = boardService.getPostById(id);
         User user = (User)session.getAttribute("loginUser");
-        if (!post.getAuthor().equals(user.getName()) && !user.isAdmin()) {
+        if (!post.getAuthor().equals(user.getUsername()) && !user.isAdmin()) {
             return "redirect:/board";
         }
         model.addAttribute("postDto", post);
@@ -80,7 +80,7 @@ public class BoardController {
 
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long id, HttpSession session) {
-        String author = ((User)session.getAttribute("loginUser")).getName();
+        String author = ((User)session.getAttribute("loginUser")).getUsername();
         boardService.deletePost(id, author);
         return "redirect:/board";
     }
