@@ -30,7 +30,7 @@
             </thead>
             <tbody>
             <tr th:each="post, iterStat : ${posts}" th:onclick="|location.href='@{/board/view/{id}(id=${post.id})}'|" style="cursor: pointer;">
-                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${posts.size * posts.number + iterStat.index + 1}">1</td>
                 <td th:text="${post.category}">카테고리</td>
                 <td th:text="${post.title}">제목</td>
                 <td th:text="${post.author}">작성자</td>
