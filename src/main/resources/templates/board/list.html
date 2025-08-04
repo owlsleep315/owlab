@@ -31,11 +31,11 @@
             <tbody>
             <tr th:each="post, iterStat : ${posts}" th:onclick="|location.href='@{/board/view/{id}(id=${post.id})}'|" style="cursor: pointer;">
                 <td th:text="${iterStat.count}">1</td>
-                <td th:text="${post.category}">자유</td>
+                <td th:text="${post.category}">카테고리</td>
                 <td th:text="${post.title}">제목</td>
-                <td th:text="${post.author}">정채황</td>
-                <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2025-07-02</td>
-                <td th:text="${post.views}">5</td>
+                <td th:text="${post.author}">작성자</td>
+                <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">9999-99-99</td>
+                <td th:text="${post.views}">0</td>
             </tr>
             </tbody>
         </table>

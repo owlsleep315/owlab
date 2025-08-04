@@ -3,7 +3,6 @@ package me.owlsleep.owlab.controller;
 import jakarta.servlet.http.HttpSession;
 import me.owlsleep.owlab.dto.CommentDto;
 import me.owlsleep.owlab.dto.PostDto;
-import me.owlsleep.owlab.entity.Post;
 import me.owlsleep.owlab.entity.User;
 import me.owlsleep.owlab.service.BoardService;
 import org.springframework.data.domain.Page;
@@ -47,13 +46,18 @@ public class BoardController {
     }
 
     @GetMapping("/write")
-    public String writeForm(Model model) {
+    public String writeForm(Model model, HttpSession session) {
         model.addAttribute("postDto", new PostDto());
+        model.addAttribute("loginUser", session.getAttribute("loginUser"));
         return "board/write";
     }
 
     @PostMapping("/write")
     public String writePost(@ModelAttribute PostDto postDto, HttpSession session) {
+        if (postDto.getCategory().equals("공지사항") && !((User)session.getAttribute("loginUser")).getRole().equals("ADMIN")) {
+            throw new IllegalArgumentException("공지사항은 관리자만 등록할 수 있습니다.");
+        }
+
         String author = ((User)session.getAttribute("loginUser")).getUsername();
         postDto.setAuthor(author);
         boardService.writePost(postDto);

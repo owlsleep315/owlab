@@ -14,9 +14,13 @@
             <input type="hidden" th:if="${postDto.id != null}" name="id" th:value="${postDto.id}" />
             <select name="category" required>
                 <option value="">카테고리 선택</option>
-                <option value="공지사항" th:selected="${postDto.category == '공지사항'}">공지사항</option>
-                <option value="건의사항" th:selected="${postDto.category == '건의사항'}">건의사항</option>
+                <option value="공지사항"
+                        th:if="${loginUser != null and loginUser.role == 'ADMIN'}"
+                        th:selected="${postDto.category == '공지사항'}">
+                    공지사항
+                </option>
                 <option value="자유게시판" th:selected="${postDto.category == '자유게시판'}">자유게시판</option>
+                <option value="건의사항" th:selected="${postDto.category == '건의사항'}">건의사항</option>
             </select>
             <input type="text" name="title" th:value="${postDto.title}" placeholder="제목" required />
             <textarea name="content" placeholder="내용 입력" required th:text="${postDto.content}"></textarea>
