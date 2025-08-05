@@ -1,9 +1,5 @@
 package me.owlsleep.owlab.service;
 
-import jakarta.annotation.PostConstruct;
-import me.owlsleep.owlab.entity.Word;
-import me.owlsleep.owlab.model.Tile;
-import me.owlsleep.owlab.model.WordleState;
 import me.owlsleep.owlab.repository.WordRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,57 +11,32 @@ import java.util.Random;
 public class WordleService {
 
     private final WordRepository wordRepository;
-    private WordleState wordleState;
+    private final Random random = new Random();
 
     public WordleService(WordRepository wordRepository) {
         this.wordRepository = wordRepository;
     }
 
-    @PostConstruct
-    public void init() {
-        resetWordle();
+    public String getRandomWord() {
+        return wordRepository.findRandomWord().toUpperCase();
     }
 
-    public void resetWordle() {
-        List<Word> allWords = wordRepository.findAll();
-        String answer = allWords.get(new Random().nextInt(allWords.size())).getWord();
-        wordleState = new WordleState(answer);
+    public boolean exists(String word) {
+        return wordRepository.existsByWord(word);
     }
 
-    public WordleState getWordleState() {
-        return wordleState;
-    }
-
-    public boolean isValidWord(String word) {
-        return wordRepository.findByWordIgnoreCase(word).isPresent();
-    }
-
-    public List<List<Tile>> getTiles() {
-        List<List<Tile>> result = new ArrayList<>();
-        String answer = wordleState.getAnswer();
-
-        for (String guess : wordleState.getGuesses()) {
-            List<Tile> row = new ArrayList<>();
-
-            for (int i = 0; i < 5; i++) {
-                char gChar = guess.charAt(i);
-                char aChar = answer.charAt(i);
-
-                String color;
-                if (gChar == aChar) {
-                    color = "green";
-                } else if (answer.indexOf(gChar) != -1) {
-                    color = "yellow";
-                } else {
-                    color = "gray";
-                }
-
-                row.add(new Tile(gChar, color));
+    public List<String> checkGuess(String guess, String target) {
+        List<String> result = new ArrayList<>(5);
+        for (int i = 0; i < 5; i++) {
+            char g = guess.charAt(i);
+            if (g == target.charAt(i)) {
+                result.add("G"); // 초록
+            } else if (target.indexOf(g) >= 0) {
+                result.add("Y"); // 노랑
+            } else {
+                result.add("B"); // 회색
             }
-
-            result.add(row);
         }
-
         return result;
     }
 }

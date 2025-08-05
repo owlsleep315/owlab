@@ -9,22 +9,60 @@
 
 <body>
 <section layout:fragment="content">
-    <h2>Wordle</h2>
-    <div class="board">
-        <div class="board">
-            <div class="row" th:each="row : ${tiles}">
-                    <span class="tile" th:each="tile : ${row}"
-                          th:text="${tile.letter}"
-                          th:classappend="${tile.color}">
-                    </span>
+
+    <!-- 게임 보드 (6행 × 5열) -->
+    <div class="board-container">
+        <div class="board" id="board">
+            <div th:each="row : ${#numbers.sequence(1,6)}" class="board-row">
+                <div th:each="col : ${#numbers.sequence(1,5)}" class="tile"></div>
             </div>
         </div>
-
     </div>
-    <form method="post" action="/wordle/guess">
-        <input type="text" name="guess" maxlength="5" required>
-        <button type="submit">ENTER</button>
-    </form>
+
+    <!-- 키보드 -->
+    <div class="keyboard-container">
+        <div class="keyboard-row">
+            <button class="key">Q</button>
+            <button class="key">W</button>
+            <button class="key">E</button>
+            <button class="key">R</button>
+            <button class="key">T</button>
+            <button class="key">Y</button>
+            <button class="key">U</button>
+            <button class="key">I</button>
+            <button class="key">O</button>
+            <button class="key">P</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key">A</button>
+            <button class="key">S</button>
+            <button class="key">D</button>
+            <button class="key">F</button>
+            <button class="key">G</button>
+            <button class="key">H</button>
+            <button class="key">J</button>
+            <button class="key">K</button>
+            <button class="key">L</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key wide">Enter</button>
+            <button class="key">Z</button>
+            <button class="key">X</button>
+            <button class="key">C</button>
+            <button class="key">V</button>
+            <button class="key">B</button>
+            <button class="key">N</button>
+            <button class="key">M</button>
+            <button class="key wide">⌫</button>
+        </div>
+    </div>
+
+    <!-- 새 게임 시작 버튼 -->
+    <div style="text-align: center;">
+        <button id="new-game-btn" class="new-game-btn">새 게임 시작하기</button>
+    </div>
+
 </section>
+<script th:src="@{/js/wordle.js}" layout:fragment="scripts"></script>
 </body>
 </html>
