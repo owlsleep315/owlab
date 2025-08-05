@@ -136,7 +136,7 @@ function submitGuess() {
                 gameOver = true; // 기회 소진 → 게임 종료
 
                 setTimeout(() => {
-                    alert("정답은 " + data.answer + " 였습니다.");
+                    alert("정답은 " + data.answer + "입니다.");
                 }, result.length * 400 + 500);
             }
 
