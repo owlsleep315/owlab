@@ -74,16 +74,14 @@ public class BoardController {
     }
 
     @PostMapping("/edit")
-    public String editPost(@ModelAttribute PostDto postDto, HttpSession session) {
-        String author = ((User)session.getAttribute("loginUser")).getUsername();
-        boardService.updatePost(postDto, author);
+    public String editPost(@ModelAttribute PostDto postDto) {
+        boardService.updatePost(postDto);
         return "redirect:/board/view/" + postDto.getId();
     }
 
     @PostMapping("/delete/{id}")
-    public String deletePost(@PathVariable Long id, HttpSession session) {
-        String author = ((User)session.getAttribute("loginUser")).getUsername();
-        boardService.deletePost(id, author);
+    public String deletePost(@PathVariable Long id) {
+        boardService.deletePost(id);
         return "redirect:/board";
     }
 

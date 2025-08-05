@@ -27,7 +27,7 @@ public interface BoardService {
 
     void dislikePost(Long postId);
 
-    void deletePost(Long postId, String author);
+    void deletePost(Long postId);
 
-    void updatePost(PostDto postDto, String author);
+    void updatePost(PostDto postDto);
 }

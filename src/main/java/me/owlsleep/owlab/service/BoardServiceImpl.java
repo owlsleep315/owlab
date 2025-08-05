@@ -106,10 +106,6 @@ public class BoardServiceImpl implements BoardService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
 
-        if (!comment.getAuthor().equals(author)) {
-            throw new IllegalArgumentException("삭제 권한이 없습니다.");
-        }
-
         commentRepository.delete(comment);
     }
 
@@ -133,26 +129,18 @@ public class BoardServiceImpl implements BoardService {
 
     // 게시글 삭제
     @Override
-    public void deletePost(Long postId, String author) {
+    public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-
-        if (!post.getAuthor().equals(author)) {
-            throw new IllegalArgumentException("삭제 권한이 없습니다.");
-        }
 
         postRepository.delete(post);
     }
 
     // 게시글 수정
     @Override
-    public void updatePost(PostDto dto, String author) {
+    public void updatePost(PostDto dto) {
         Post post = postRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-
-        if (!post.getAuthor().equals(author)) {
-            throw new IllegalArgumentException("수정 권한이 없습니다.");
-        }
 
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
