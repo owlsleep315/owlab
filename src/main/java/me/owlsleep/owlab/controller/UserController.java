@@ -25,12 +25,13 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginRequestDto loginRequestDto,
+                        @RequestParam(required = false) String redirectURL,
                         HttpSession session,
                         Model model) {
         try {
             User user = userService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
             session.setAttribute("loginUser", user);
-            return "redirect:/";
+            return "redirect:" + (redirectURL != null && !redirectURL.isBlank() ? redirectURL : "/");
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "login";
