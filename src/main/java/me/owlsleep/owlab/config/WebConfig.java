@@ -14,10 +14,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "/board/write",
                         "/board/edit/**",
                         "/board/delete/**",
-                        "/board/like/**",
-                        "/board/dislike/**",
                         "/board/comment",
-                        "/board/comment/delete/**"
+                        "/board/comment/delete/**",
+                        "/board/*/reaction"
                 );
     }
 }

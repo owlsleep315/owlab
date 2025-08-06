@@ -3,19 +3,18 @@ package me.owlsleep.owlab.service;
 import lombok.RequiredArgsConstructor;
 import me.owlsleep.owlab.dto.CommentDto;
 import me.owlsleep.owlab.dto.PostDto;
-import me.owlsleep.owlab.entity.Comment;
-import me.owlsleep.owlab.entity.Post;
+import me.owlsleep.owlab.entity.*;
 import me.owlsleep.owlab.repository.CommentRepository;
+import me.owlsleep.owlab.repository.PostReactionRepository;
 import me.owlsleep.owlab.repository.PostRepository;
+import me.owlsleep.owlab.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +22,9 @@ import java.util.stream.Collectors;
 public class BoardServiceImpl implements BoardService {
 
     private final PostRepository postRepository;
+    private final PostReactionRepository postReactionRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     // 전체 글 조회 (카테고리별 필터링)
     @Override
@@ -40,10 +41,24 @@ public class BoardServiceImpl implements BoardService {
 
     // 게시글 상세 조회
     @Override
-    public PostDto getPostById(Long id) {
+    @Transactional(readOnly = true)
+    public PostDto getPostById(Long id, Long userId) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        return toDto(post);
+
+        PostDto postDto = toDto(post);
+
+        postDto.setLikeCount(postReactionRepository.countByPostIdAndReactionType(post.getId(), ReactionType.LIKE));
+        postDto.setDislikeCount(postReactionRepository.countByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE));
+
+        if (userId != null) {
+            String userReaction = postReactionRepository.findByUserIdAndPostId(userId, id)
+                    .map(r -> r.getReactionType().name())
+                    .orElse(null);
+            postDto.setUserReaction(userReaction);
+        }
+
+        return postDto;
     }
 
     // 게시글 작성
@@ -109,23 +124,40 @@ public class BoardServiceImpl implements BoardService {
         commentRepository.delete(comment);
     }
 
-    // 추천
+    // 추천/비추천
     @Override
-    public void likePost(Long postId) {
+    @Transactional
+    public Map<String, Object> reactToPost(Long postId, Long userId, ReactionType type) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        post.setLikes(post.getLikes() + 1);
-        postRepository.save(post);
+                .orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
+
+        Optional<PostReaction> existing = postReactionRepository.findByUserIdAndPostId(userId, postId);
+
+        if (existing.isPresent()) {
+            PostReaction reaction = existing.get();
+            if (reaction.getReactionType() == type) {
+                // 같은 버튼 다시 누르면 취소
+                postReactionRepository.delete(reaction);
+            } else {
+                // 반대 반응으로 변경
+                reaction.setReactionType(type);
+            }
+        } else {
+            // 최초 반응
+            PostReaction newReaction = new PostReaction();
+            newReaction.setPost(post);
+            User userRef = userRepository.getReferenceById(userId);
+            newReaction.setUser(userRef);
+            newReaction.setReactionType(type);
+            postReactionRepository.save(newReaction);
+        }
+
+        long likeCount = postReactionRepository.countByPostIdAndReactionType(postId, ReactionType.LIKE);
+        long dislikeCount = postReactionRepository.countByPostIdAndReactionType(postId, ReactionType.DISLIKE);
+
+        return Map.of("likes", likeCount, "dislikes", dislikeCount);
     }
 
-    // 비추천
-    @Override
-    public void dislikePost(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        post.setDislikes(post.getDislikes() + 1);
-        postRepository.save(post);
-    }
 
     // 게시글 삭제
     @Override
@@ -162,10 +194,9 @@ public class BoardServiceImpl implements BoardService {
         dto.setCreatedAt(post.getCreatedAt());
         dto.setUpdatedAt(post.getUpdatedAt());
         dto.setViews(post.getViews());
-        dto.setLikes(post.getLikes());
-        dto.setDislikes(post.getDislikes());
         return dto;
     }
+
 
     private CommentDto toCommentDto(Comment comment) {
         List<CommentDto> replyDtos = comment.getReplies() != null

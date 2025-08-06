@@ -20,12 +20,17 @@
         </div>
         <div class="post-content" th:text="${post.content}">내용</div>
         <div class="post-actions">
-            <form th:action="@{'/board/like/' + ${post.id}}" method="post">
-                <button type="submit" class="btn-like">👍 추천 <span th:text="${post.likes}">0</span></button>
-            </form>
-            <form th:action="@{'/board/dislike/' + ${post.id}}" method="post">
-                <button type="submit" class="btn-dislike">👎 비추천 <span th:text="${post.dislikes}">0</span></button>
-            </form>
+            <button class="btn-like"
+                    th:classappend="${post.userReaction == 'LIKE'} ? ' active' : ''"
+                    th:attr="data-post-id=${post.id}">
+                👍 추천 <span id="like-count" th:text="${post.likeCount}">0</span>
+            </button>
+
+            <button class="btn-dislike"
+                    th:classappend="${post.userReaction == 'DISLIKE'} ? ' active' : ''"
+                    th:attr="data-post-id=${post.id}">
+                👎 비추천 <span id="dislike-count" th:text="${post.dislikeCount}">0</span>
+            </button>
         </div>
     </div>
 

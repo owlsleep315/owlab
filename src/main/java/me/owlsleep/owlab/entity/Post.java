@@ -32,8 +32,6 @@ public class Post {
     private LocalDateTime updatedAt;
 
     private int views;
-    private int likes;
-    private int dislikes;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

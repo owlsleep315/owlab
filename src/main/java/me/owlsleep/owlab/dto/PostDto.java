@@ -19,6 +19,7 @@ public class PostDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int views;
-    private int likes;
-    private int dislikes;
+    private long likeCount;
+    private long dislikeCount;
+    private String userReaction; // "LIKE", "DISLIKE", null
 }

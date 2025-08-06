@@ -118,15 +118,16 @@ table.post-list {
     border-radius: 20px;
     cursor: pointer;
     font-size: 0.9rem;
+    color: black;
     transition: all 0.3s ease;
 }
 
-.post-actions .btn-like:hover {
+.post-actions .btn-like.active {
     background-color: #e7f5ec;
     border-color: #28a745;
 }
 
-.post-actions .btn-dislike:hover {
+.post-actions .btn-dislike.active {
     background-color: #fbe9eb;
     border-color: #dc3545;
 }

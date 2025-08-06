@@ -3,6 +3,7 @@ package me.owlsleep.owlab.controller;
 import jakarta.servlet.http.HttpSession;
 import me.owlsleep.owlab.dto.CommentDto;
 import me.owlsleep.owlab.dto.PostDto;
+import me.owlsleep.owlab.entity.ReactionType;
 import me.owlsleep.owlab.entity.User;
 import me.owlsleep.owlab.service.BoardService;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -36,10 +39,14 @@ public class BoardController {
     @GetMapping("/view/{id}")
     public String viewPost(@PathVariable Long id, Model model, HttpSession session) {
         boardService.incrementViewCount(id);
-        PostDto post = boardService.getPostById(id);
+        User loginUser = (User) session.getAttribute("loginUser");
+        Long userId = loginUser != null ? loginUser.getId() : null;
+        PostDto post = boardService.getPostById(id, userId);
+
         model.addAttribute("post", post);
         model.addAttribute("comments", boardService.getCommentsByPostId(id));
-        model.addAttribute("loginUser", session.getAttribute("loginUser"));
+        model.addAttribute("loginUser", loginUser);
+
         return "board/view";
     }
 
@@ -64,8 +71,8 @@ public class BoardController {
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model, HttpSession session) {
-        PostDto post = boardService.getPostById(id);
         User user = (User)session.getAttribute("loginUser");
+        PostDto post = boardService.getPostById(id, user.getId());
         if (!post.getAuthor().equals(user.getUsername()) && !user.isAdmin()) {
             return "redirect:/board";
         }
@@ -85,16 +92,11 @@ public class BoardController {
         return "redirect:/board";
     }
 
-    @PostMapping("/like/{id}")
-    public String likePost(@PathVariable Long id) {
-        boardService.likePost(id);
-        return "redirect:/board/view/" + id;
-    }
-
-    @PostMapping("/dislike/{id}")
-    public String dislikePost(@PathVariable Long id) {
-        boardService.dislikePost(id);
-        return "redirect:/board/view/" + id;
+    @PostMapping("/{id}/reaction")
+    @ResponseBody
+    public Map<String, Object> reactToPost(@PathVariable Long id, @RequestParam String type, HttpSession session) {
+        User user = (User)session.getAttribute("loginUser");
+        return boardService.reactToPost(id, user.getId(), ReactionType.valueOf(type));
     }
 
     @PostMapping("/comment")

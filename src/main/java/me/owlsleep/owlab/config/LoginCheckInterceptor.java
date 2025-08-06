@@ -16,8 +16,19 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         // 세션에서 로그인 여부 확인
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {
-            // 로그인 안 된 경우, 로그인 페이지로 리다이렉트
-            response.sendRedirect("/login?redirectURL=" + URLEncoder.encode(request.getRequestURI(), "UTF-8"));
+
+            String accept = request.getHeader("Accept");
+            boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"))
+                    || (accept != null && accept.contains("application/json"));
+
+            if (isAjax) {
+                response.setContentType("application/json;charset=UTF-8");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"error\":\"로그인이 필요합니다\"}");
+            } else {
+                response.sendRedirect("/login?redirectURL=" + URLEncoder.encode(request.getRequestURI(), "UTF-8"));
+            }
+
             return false;
         }
 
