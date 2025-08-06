@@ -64,5 +64,8 @@ document.querySelectorAll(".btn-like, .btn-dislike").forEach(btn => {
             })
             .catch(err => console.error(err));
 
+        // 버튼 다시 활성화
+        likeBtn.disabled = false;
+        dislikeBtn.disabled = false;
     });
 });
