@@ -29,9 +29,11 @@ public class Game {
     private String imageUrl;
 
     @Column(nullable = false)
+    @Builder.Default
     private long views = 0L;
 
     @Column(nullable=false)
+    @Builder.Default
     private boolean official = false;
 
     private LocalDateTime createdAt;
