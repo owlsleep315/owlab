@@ -1,6 +1,5 @@
 package me.owlsleep.owlab.repository;
 
-import me.owlsleep.owlab.dto.GameDto;
 import me.owlsleep.owlab.entity.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 
