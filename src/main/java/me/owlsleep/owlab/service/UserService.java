@@ -5,6 +5,9 @@ import me.owlsleep.owlab.repository.UserRepository;
 import org.springframework.security.crypto.password
         .PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 public class UserService {
@@ -36,13 +39,16 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public User login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다."));
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
-        return user;
+        user.setLastLoginAt(LocalDateTime.now());
+        user.setLoginCount(user.getLoginCount() + 1);
+        return userRepository.save(user);
     }
 
     public Boolean existsByUsername(String username) {

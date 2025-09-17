@@ -10,6 +10,7 @@
           <a href="/board">게시판</a>
           <a href="/wordle">워들</a>
           <a href="/food">뭐먹지</a>
+          <a th:if="${session.loginUser != null and session.loginUser.admin}" href="/admin">관리자</a>
         </nav>
       </div>
 
