@@ -101,7 +101,7 @@ public class WordleStatisticService {
     private WordleRankingDto toRankingDto(WordleStatistic statistic, Integer rank, boolean mine) {
         return WordleRankingDto.builder()
                 .rank(rank)
-                .displayName(resolveDisplayName(statistic.getUser()))
+                .displayName(statistic.getUser().getUsername())
                 .successCount(statistic.getSuccessCount())
                 .totalGames(statistic.getTotalGames())
                 .winRate(calculateWinRate(statistic))
@@ -112,7 +112,7 @@ public class WordleStatisticService {
     private WordleRankingDto createEmptyRanking(User user) {
         return WordleRankingDto.builder()
                 .rank(null)
-                .displayName(resolveDisplayName(user))
+                .displayName(user.getUsername())
                 .successCount(0L)
                 .totalGames(0L)
                 .winRate(0.0)
@@ -126,12 +126,5 @@ public class WordleStatisticService {
         }
         double rate = (double) statistic.getSuccessCount() / statistic.getTotalGames() * 100.0;
         return Math.round(rate * 10.0) / 10.0;
-    }
-
-    private String resolveDisplayName(User user) {
-        if (user.getName() != null && !user.getName().isBlank()) {
-            return user.getName();
-        }
-        return user.getUsername();
     }
 }
