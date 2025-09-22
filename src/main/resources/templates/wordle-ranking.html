@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/wordle-ranking.css}" layout:fragment="styles">
+</head>
+
+<body>
+<section layout:fragment="content" class="ranking-section">
+    <div class="ranking-header">
+        <div>
+            <h2>워들 랭킹</h2>
+            <p class="ranking-subtitle">상위 10명의 누적 게임 클리어 기록을 확인하세요.</p>
+        </div>
+        <a class="ranking-back-link" th:href="@{/wordle}">워들 하러 가기</a>
+    </div>
+
+    <div class="ranking-table-wrapper">
+        <table class="ranking-table">
+            <thead>
+            <tr>
+                <th>순위</th>
+                <th>유저</th>
+                <th>성공수</th>
+                <th>시도수</th>
+                <th>승률</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ranking : ${rankings}"
+                th:classappend="${ranking.mine} ? 'is-mine' : ''">
+                <td th:text="${ranking.rank != null ? ranking.rank : '-'}">1</td>
+                <td th:text="${ranking.displayName}">owlab</td>
+                <td th:text="${ranking.successCount}">5</td>
+                <td th:text="${ranking.totalGames}">7</td>
+                <td th:text="${ranking.totalGames == 0 ? '0%' : #numbers.formatDecimal(ranking.winRate, 1, 1) + '%'}">71.4%</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(rankings)}">
+                <td colspan="5" class="empty-row">아직 집계된 기록이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="my-ranking" th:if="${session.loginUser != null}">
+        <h3>내 랭킹</h3>
+        <div class="my-ranking-card" th:if="${myRanking != null}">
+            <div class="metric">
+                <span class="label">순위</span>
+                <span class="value" th:text="${myRanking.rank != null ? myRanking.rank : '-'}">-</span>
+            </div>
+            <div class="metric">
+                <span class="label">성공수</span>
+                <span class="value" th:text="${myRanking.successCount}">0</span>
+            </div>
+            <div class="metric">
+                <span class="label">시도수</span>
+                <span class="value" th:text="${myRanking.totalGames}">0</span>
+            </div>
+            <div class="metric">
+                <span class="label">승률</span>
+                <span class="value" th:text="${myRanking.totalGames == 0 ? '0%' : #numbers.formatDecimal(myRanking.winRate, 1, 1) + '%'}">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-ranking my-ranking-guest" th:if="${session.loginUser == null}">
+        <p>로그인 후 나의 랭킹을 확인할 수 있습니다.</p>
+        <a class="login-link" th:href="@{/login}">로그인 하기</a>
+    </div>
+</section>
+</body>
+</html>

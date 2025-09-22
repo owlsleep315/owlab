@@ -116,6 +116,14 @@
     transition: transform 0.1s;
 }
 
+.wordle-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
 .new-game-btn {
     background-color: var(--secondary-color);
     color: white;
@@ -133,5 +141,17 @@
 .new-game-btn:hover {
     background-color: var(--primary-color);
     box-shadow: 0 3px 7px rgba(5, 5, 5, 0.7);
+}
+
+.ranking-link {
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.ranking-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
 }
 

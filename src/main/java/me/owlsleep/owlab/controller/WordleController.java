@@ -1,6 +1,9 @@
 package me.owlsleep.owlab.controller;
 
+import jakarta.servlet.http.HttpSession;
+import me.owlsleep.owlab.entity.User;
 import me.owlsleep.owlab.service.WordleService;
+import me.owlsleep.owlab.service.WordleStatisticService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +17,13 @@ import java.util.Map;
 public class WordleController {
 
     private final WordleService wordleService;
+    private final WordleStatisticService wordleStatisticService;
     private String targetWord;
     private int attempts;
 
-    public WordleController(WordleService wordleService) {
+    public WordleController(WordleService wordleService, WordleStatisticService wordleStatisticService) {
         this.wordleService = wordleService;
+        this.wordleStatisticService = wordleStatisticService;
     }
 
     @GetMapping
@@ -40,7 +45,7 @@ public class WordleController {
 
     @PostMapping("/guess")
     @ResponseBody
-    public Object guess(@RequestBody Map<String, String> payload) {
+    public Object guess(@RequestBody Map<String, String> payload, HttpSession session) {
         if (targetWord == null) {
             return Map.of("error", "게임이 시작되지 않았습니다.");
         }
@@ -54,17 +59,40 @@ public class WordleController {
         attempts++;
         List<String> result = wordleService.checkGuess(guess, targetWord);
 
+        User loginUser = (User) session.getAttribute("loginUser");
+
         // 정답 맞춘 경우
         if (guess.equals(targetWord)) {
+            if (loginUser != null) {
+                wordleStatisticService.recordGameResult(loginUser, true);
+            }
+            targetWord = null;
+            attempts = 0;
             return Map.of("result", result, "success", true);
         }
 
         // 기회를 모두 소진한 경우
         if (attempts >= 6) {
-            return Map.of("result", result, "success", false, "answer", targetWord);
+            if (loginUser != null) {
+                wordleStatisticService.recordGameResult(loginUser, false);
+            }
+            String answer = targetWord;
+            targetWord = null;
+            attempts = 0;
+            return Map.of("result", result, "success", false, "answer", answer);
         }
 
         // 아직 게임 진행 중
         return Map.of("result", result);
+    }
+
+    @GetMapping("/ranking")
+    public String ranking(Model model, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        model.addAttribute("rankings", wordleStatisticService.getTopRankings(loginUser));
+        if (loginUser != null) {
+            model.addAttribute("myRanking", wordleStatisticService.getRankingSnapshot(loginUser));
+        }
+        return "wordle-ranking";
     }
 }
