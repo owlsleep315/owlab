@@ -30,6 +30,10 @@ public class WordleController {
     @GetMapping
     public String wordle(Model model, HttpSession session) {
         startNewGame(session);
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser != null) {
+            wordleStatisticService.recordGameResult(loginUser, false);
+        }
         model.addAttribute("message", "새 게임 시작");
         return "wordle";
     }
@@ -38,6 +42,10 @@ public class WordleController {
     @ResponseBody
     public Map<String, String> startGame(HttpSession session) {
         startNewGame(session);
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser != null) {
+            wordleStatisticService.recordGameResult(loginUser, false);
+        }
         return Map.of("message", "새 게임 시작");
     }
 
@@ -63,9 +71,6 @@ public class WordleController {
 
         // 정답 맞춘 경우
         if (guess.equals(targetWord)) {
-            if (loginUser != null) {
-                wordleStatisticService.recordGameResult(loginUser, true);
-            }
             resetGame(session);
             return Map.of("result", result, "success", true);
         }
