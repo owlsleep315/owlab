@@ -71,15 +71,15 @@ public class WordleController {
 
         // 정답 맞춘 경우
         if (guess.equals(targetWord)) {
+            if (loginUser != null) {
+                wordleStatisticService.recordGameResult(loginUser, true);
+            }
             resetGame(session);
             return Map.of("result", result, "success", true);
         }
 
         // 기회를 모두 소진한 경우
         if (attempts >= 6) {
-            if (loginUser != null) {
-                wordleStatisticService.recordGameResult(loginUser, false);
-            }
             String answer = targetWord;
             resetGame(session);
             return Map.of("result", result, "success", false, "answer", answer);
