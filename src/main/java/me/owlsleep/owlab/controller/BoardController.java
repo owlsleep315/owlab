@@ -77,6 +77,7 @@ public class BoardController {
             return "redirect:/board";
         }
         model.addAttribute("postDto", post);
+        model.addAttribute("loginUser", session.getAttribute("loginUser"));
         return "board/write";
     }
 
